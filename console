@@ -1,0 +1,127 @@
+require "rubygems"
+require "simpleconsole"
+require "./custom classes/example_user"
+#require "D:/RailsInstaller/Ruby1.9.3/lib/ruby/gems/1.9.1/gems/simpleconsole-0.1.1/lib/simpleconsole"
+# require File.dirname(__FILE__) + "/../"
+
+class ConsoleController < SimpleConsole::Controller
+	def default
+		puts "-- BLOCKS --"
+		(1..5).each do |number|
+			puts 2 * number
+			puts '--'
+		end
+
+		3.times { puts "Betelgeuse!"}
+
+		puts (1 .. 5).map { |i| i**2}
+
+		puts %w[a b c]
+		puts %w[a b c].map { |char| char.upcase}
+		puts %w[A B C].map { |char| char.downcase}
+
+		puts "-- HASHES & SYMBOLS --"
+		puts user = {}
+		puts user["first_name"] = "Michael"
+		puts user["last_name"] = "Hartl"
+		puts user["first_name"]
+		puts user
+		puts user = {"first_name" => "Michael", "last_name" => "Hartl"}
+		puts user = { :name => "Michael Heartl", :email => "michael@example.com" }
+		puts user[:name] if !user[:name].nil?
+		puts user[:password] if !user[:password].nil?
+		a = ('a'..'z').to_a
+		puts a
+		puts ('a'..'z').to_a.shuffle[0..7]
+		puts "name".split('')
+		puts "foobar".reverse
+		h1 = { :name => "Michael Hartl", :email => "michael@example.com" }
+		h2 = { name: "Michael Hartl", email: "michael@example.com" }
+		puts h1
+		puts h2
+		puts h1 == h2
+		params = {}
+		params[:user] = {name:"Martin Michalec", email: "martin.michalec@email.com"}
+		puts params
+		puts params[:user][:email]
+		puts params[:user]
+		puts flash = { success: "It worked!", error: "It failed." }
+		flash.each do |key, value|
+			puts "Key #{key.inspect} has value #{value.inspect}"
+		end
+		puts (1..5).to_a.inspect
+		puts :name.inspect
+		puts "It worked!", "It worked!".inspect
+		p :name
+		puts "-- CLASSES --"
+		puts s = String.new("Class")
+		puts s.class
+		puts s.class.superclass
+		puts s.class.superclass.superclass
+		if s.class.superclass.superclass.superclass.nil?
+			puts "nil"
+		else
+			puts s.class.superclass.superclass.superclass
+		end
+		puts "-- CLASSES INHERITANCE --"
+		@w = Word.new("hello")
+		#puts @w.getTheWord
+		puts @w.palindrome
+
+		@w2 = Word.new("ewe")
+		puts @w2.palindrome
+
+		word2 = Word2.new("level")
+		puts word2.palindrome?
+		puts word2.length
+		#puts "level".palindrome?
+
+		e_u = User.new()
+		puts e_u.name if !e_u.name.nil?
+		e_u.name = "Example User"
+		puts e_u.name if !e_u.name.nil?
+		e_u.email = "user@example.com"
+		puts e_u.formatted_email if !e_u.email.nil?
+
+		puts "-- 4.6 Exercises --"
+		@w = Word.new("hello")
+		puts @w.splitShuffleJoin
+
+		params = {:father => person1 = { :first => "John", :last => "Father" } , :mother => person2 = { :first => "Mary", :last => "Mother" }, :child =>person3 = { :first => "Aimy", :last => "Child" }}
+		puts params[:father][:first]
+		puts params[:mother][:last]
+		puts params[:child]
+	end
+
+	class Word < String
+		@@theWord
+
+		def getTheWord
+			@@theWord
+		end
+
+		def initialize theWord
+			@@theWord = theWord
+		end
+
+		def palindrome
+			puts @@theWord
+			@@theWord == @@theWord.reverse
+		end
+
+		def splitShuffleJoin()
+			@@theWord.split('').shuffle.join
+		end
+	end
+
+	class Word2 < String
+		def palindrome?
+			self == self.reverse
+		end
+	end
+end
+
+class ConsoleView < SimpleConsole::View
+end
+
+SimpleConsole::Application.run(ARGV, ConsoleController, ConsoleView)
